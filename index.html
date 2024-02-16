@@ -3,72 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotating Cube</title>
+    <title>Three.js Scene</title>
     <style>
-        .cube {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotateCube 5s infinite linear;
-        }
-
-        .face {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 2px solid #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            font-family: Arial, sans-serif;
-        }
-
-        .front {
-            transform: translateZ(100px);
-        }
-
-        .back {
-            transform: rotateY(180deg) translateZ(100px);
-        }
-
-        .right {
-            transform: rotateY(90deg) translateZ(100px);
-        }
-
-        .left {
-            transform: rotateY(-90deg) translateZ(100px);
-        }
-
-        .top {
-            transform: rotateX(90deg) translateZ(100px);
-        }
-
-        .bottom {
-            transform: rotateX(-90deg) translateZ(100px);
-        }
-
-        @keyframes rotateCube {
-            from {
-                transform: rotateY(0deg);
-            }
-
-            to {
-                transform: rotateY(360deg);
-            }
-        }
+        body { margin: 0; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
-    <div class="cube">
-        <div class="face front">hi my love</div>
-        <div class="face back">hi my love</div>
-        <div class="face right">hi my love</div>
-        <div class="face left">hi my love</div>
-        <div class="face top">hi my love</div>
-        <div class="face bottom">hi my love</div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Set up the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a cube and add it to the scene
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // Create ambient light
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Create point light
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
+
+        // Set camera position
+        camera.position.z = 5;
+
+        // Define the render function
+        const animate = function () {
+            requestAnimationFrame(animate);
+
+            // Rotate the cube
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        };
+
+        // Call the render function
+        animate();
+    </script>
 </body>
 </html>
